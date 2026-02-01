@@ -94,6 +94,31 @@ Kafka Control Center provides monitoring features such as:
 
 ---
 
+## Kafka Producer and Consumer
+
+### Producer (transaction_producer.py)
+
+The producer is a Python application that:
+- Connects to the source PostgreSQL database (financialDB)
+- Fetches transactions from the `transactions` table
+- Publishes each transaction as a JSON message to Kafka topic `transactions`
+- Uses the `transaction_id` as the message key
+- Implements delivery callbacks to track successful publications
+
+---
+
+### Consumer (transaction_consumer.py)
+
+The consumer is a Python application that:
+- Subscribes to the Kafka topic `transactions`
+- Reads incoming transaction messages in real-time
+- Connects to the destination PostgreSQL database (destinationdb)
+- Creates the `transactions_sink` table if it doesn't exist
+- Inserts each transaction into the destination database
+- Uses `ON CONFLICT DO NOTHING` to avoid duplicate insertions
+
+---
+
 ## How to Run the Project
 
 ### Prerequisites
